@@ -58,17 +58,17 @@ cogna-dev/sbom
 ### Dependency Graph
 
 ```
-         lib
-        /|\ \
-       / | \ \
- cargo go terra discovery
-   \  |  |   /
-    \ |  |  /
-      types  version
-        |
-      formats
-      /     \
-   spdx  cyclonedx
+             lib
+         /   |   |   \
+        /    |   |    \
+  cargo     go terra  discovery
+      \    |   |    /
+       \   |   |   /
+         types  version
+           |
+         formats
+         /     \
+      spdx   cyclonedx
 ```
 
 ---
