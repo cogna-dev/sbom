@@ -1,0 +1,9 @@
+{
+  "name": "cogna-dev/sbom",
+  "version": "0.1.0",
+  "readme": "README.md",
+  "repository": "https://github.com/cogna-dev/sbom",
+  "license": "MIT",
+  "keywords": ["sbom", "spdx", "cyclonedx", "purl", "dependency"],
+  "description": "Software Composition Analysis - SBOM generation and dependency management"
+}
