@@ -1,0 +1,69 @@
+{
+  "ecosystem": "go",
+  "comparisons": [
+    {
+      "tool": "syft",
+      "ecosystem": "go",
+      "format": "spdx",
+      "only_ours": [
+        {
+          "tag": "only-ours",
+          "package": "sample-go-app",
+          "version_ours": "1.21",
+          "version_theirs": null,
+          "purl_ours": null,
+          "purl_theirs": null,
+          "detail": null
+        }
+      ],
+      "only_theirs": [
+        {
+          "tag": "missing",
+          "package": "/Users/yufei/workspace/github/cogna-dev/sbom/tests/fixtures/go",
+          "version_ours": null,
+          "version_theirs": "unknown",
+          "purl_ours": null,
+          "purl_theirs": null,
+          "detail": null
+        }
+      ],
+      "version_mismatches": [],
+      "purl_diffs": [],
+      "matched": 27,
+      "total_ours": 28,
+      "total_theirs": 28
+    },
+    {
+      "tool": "msbom",
+      "ecosystem": "go",
+      "format": "spdx",
+      "only_ours": [
+        {
+          "tag": "only-ours",
+          "package": "sample-go-app",
+          "version_ours": "1.21",
+          "version_theirs": null,
+          "purl_ours": null,
+          "purl_theirs": null,
+          "detail": null
+        }
+      ],
+      "only_theirs": [
+        {
+          "tag": "missing",
+          "package": "sample-go",
+          "version_ours": null,
+          "version_theirs": "0.1.0",
+          "purl_ours": null,
+          "purl_theirs": "pkg:swid/cogna-dev/cogna-dev.github.io/sample-go@0.1.0?tag_id=eadc6fce-8c30-44ca-845a-fb15c1f59256",
+          "detail": null
+        }
+      ],
+      "version_mismatches": [],
+      "purl_diffs": [],
+      "matched": 27,
+      "total_ours": 28,
+      "total_theirs": 28
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "ecosystem": "go",
+  "comparisons": [
+    {
+      "tool": "syft",
+      "ecosystem": "go",
+      "format": "cyclonedx",
+      "only_ours": [],
+      "only_theirs": [
+        {
+          "tag": "missing",
+          "package": "/Users/yufei/workspace/github/cogna-dev/sbom/tests/fixtures/go/go.mod",
+          "version_ours": null,
+          "version_theirs": "unknown",
+          "purl_ours": null,
+          "purl_theirs": null,
+          "detail": null
+        }
+      ],
+      "version_mismatches": [],
+      "purl_diffs": [],
+      "matched": 27,
+      "total_ours": 27,
+      "total_theirs": 28
+    }
+  ]
+}

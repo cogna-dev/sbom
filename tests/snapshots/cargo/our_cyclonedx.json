@@ -1,0 +1,202 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:00000000-0000-0000-0000-000000000000",
+  "version": 1,
+  "metadata": {
+    "timestamp": "1970-01-01T00:00:00Z",
+    "tools": [
+      {
+        "vendor": "cogna-dev",
+        "name": "cogna-dev/sbom",
+        "version": "0.1.0"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "bom-ref": "pkg:sample-app",
+      "name": "sample-app",
+      "version": "0.3.0",
+      "description": "A sample Rust application for SBOM testing"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/serde@1.0.195",
+      "name": "serde",
+      "version": "1.0.195",
+      "purl": "pkg:cargo/serde@1.0.195",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "63261df402c1e712e519d191bed1b2d03fb47bdadebedc9cf8b5e71feecf9c2f"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/serde_json@1.0.111",
+      "name": "serde_json",
+      "version": "1.0.111",
+      "purl": "pkg:cargo/serde_json@1.0.111",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "176e46277c5f3f6daa8c1e282a35b08f5cf4e2f7cdf637dfe24d3c6e80ba8deb"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/tokio@1.35.1",
+      "name": "tokio",
+      "version": "1.35.1",
+      "purl": "pkg:cargo/tokio@1.35.1",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c89b4efa943be685f629b149f53829423f8f5531ea21249408e8e2f8671ec818"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/reqwest@0.11.23",
+      "name": "reqwest",
+      "version": "0.11.23",
+      "purl": "pkg:cargo/reqwest@0.11.23",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "37b1ae8d9ac08420c66222fb9096fc5de435c3c48542bc5336c51892cffafb41"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/anyhow@1.0.79",
+      "name": "anyhow",
+      "version": "1.0.79",
+      "purl": "pkg:cargo/anyhow@1.0.79",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "080e9890a082662b09c1ad45f567faeeb47f22b5fb23895fbe1e651e718e25ca"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/log@0.4.20",
+      "name": "log",
+      "version": "0.4.20",
+      "purl": "pkg:cargo/log@0.4.20",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b5e6163cb8c49088c2c36f57875e58ccd8c87c7427f7fbd50ea6710b2f3f2e8f"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/env_logger@0.10.1",
+      "name": "env_logger",
+      "version": "0.10.1",
+      "purl": "pkg:cargo/env_logger@0.10.1",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "95b3f3e67048839cb0d0781f445682a35113da7121f7c949db0e2be96a4fbece"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/pretty_assertions@1.4.0",
+      "name": "pretty_assertions",
+      "version": "1.4.0",
+      "purl": "pkg:cargo/pretty_assertions@1.4.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "af7cee1a6c8a5b9208b3cb1061f10c0cb689087b3d8ce85fb9d2dd7a29b6ba66"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/tempfile@3.9.0",
+      "name": "tempfile",
+      "version": "3.9.0",
+      "purl": "pkg:cargo/tempfile@3.9.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "01ce4141aa927a6d1bd34a041795abd0db1cccba5d5f24b009f694bdf3a1f3fa"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/build-info-build@0.0.35",
+      "name": "build-info-build",
+      "version": "0.0.35",
+      "purl": "pkg:cargo/build-info-build@0.0.35",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "59b0c46de4c1f65c21dae2b90a5a35d81897be71e0852ab6d73ec6d2c2cbad38"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "pkg:sample-app",
+      "dependsOn": [
+        "pkg:cargo/serde@1.0.195",
+        "pkg:cargo/serde_json@1.0.111",
+        "pkg:cargo/tokio@1.35.1",
+        "pkg:cargo/reqwest@0.11.23",
+        "pkg:cargo/anyhow@1.0.79",
+        "pkg:cargo/log@0.4.20",
+        "pkg:cargo/env_logger@0.10.1",
+        "pkg:cargo/pretty_assertions@1.4.0",
+        "pkg:cargo/tempfile@3.9.0",
+        "pkg:cargo/build-info-build@0.0.35"
+      ]
+    },
+    {
+      "ref": "pkg:cargo/serde@1.0.195"
+    },
+    {
+      "ref": "pkg:cargo/serde_json@1.0.111"
+    },
+    {
+      "ref": "pkg:cargo/tokio@1.35.1"
+    },
+    {
+      "ref": "pkg:cargo/reqwest@0.11.23"
+    },
+    {
+      "ref": "pkg:cargo/anyhow@1.0.79"
+    },
+    {
+      "ref": "pkg:cargo/log@0.4.20"
+    },
+    {
+      "ref": "pkg:cargo/env_logger@0.10.1"
+    },
+    {
+      "ref": "pkg:cargo/pretty_assertions@1.4.0"
+    },
+    {
+      "ref": "pkg:cargo/tempfile@3.9.0"
+    },
+    {
+      "ref": "pkg:cargo/build-info-build@0.0.35"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "ecosystem": "cargo",
+  "comparisons": [
+    {
+      "tool": "syft",
+      "ecosystem": "cargo",
+      "format": "spdx",
+      "only_ours": [],
+      "only_theirs": [
+        {
+          "tag": "missing",
+          "package": "/Users/yufei/workspace/github/cogna-dev/sbom/tests/fixtures/cargo",
+          "version_ours": null,
+          "version_theirs": "unknown",
+          "purl_ours": null,
+          "purl_theirs": null,
+          "detail": null
+        }
+      ],
+      "version_mismatches": [],
+      "purl_diffs": [],
+      "matched": 11,
+      "total_ours": 11,
+      "total_theirs": 12
+    },
+    {
+      "tool": "msbom",
+      "ecosystem": "cargo",
+      "format": "spdx",
+      "only_ours": [
+        {
+          "tag": "only-ours",
+          "package": "sample-app",
+          "version_ours": "0.3.0",
+          "version_theirs": null,
+          "purl_ours": null,
+          "purl_theirs": null,
+          "detail": null
+        }
+      ],
+      "only_theirs": [
+        {
+          "tag": "missing",
+          "package": "sample-cargo",
+          "version_ours": null,
+          "version_theirs": "0.1.0",
+          "purl_ours": null,
+          "purl_theirs": "pkg:swid/cogna-dev/cogna-dev.github.io/sample-cargo@0.1.0?tag_id=df66f600-9e94-47cf-b24c-e555015ac4bf",
+          "detail": null
+        }
+      ],
+      "version_mismatches": [],
+      "purl_diffs": [],
+      "matched": 10,
+      "total_ours": 11,
+      "total_theirs": 11
+    }
+  ]
+}

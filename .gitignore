@@ -1,1 +1,8 @@
 _build/
+tests/snapshots/.msbom_tmp/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+

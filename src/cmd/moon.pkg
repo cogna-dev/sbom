@@ -1,0 +1,6 @@
+import {
+  "cogna-dev/sbom/src/lib",
+  "moonbitlang/core/json",
+  "moonbitlang/core/env",
+}
+options("is-main": true)

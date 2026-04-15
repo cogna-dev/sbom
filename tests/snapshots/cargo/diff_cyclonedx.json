@@ -1,0 +1,36 @@
+{
+  "ecosystem": "cargo",
+  "comparisons": [
+    {
+      "tool": "syft",
+      "ecosystem": "cargo",
+      "format": "cyclonedx",
+      "only_ours": [],
+      "only_theirs": [
+        {
+          "tag": "missing",
+          "package": "/Users/yufei/workspace/github/cogna-dev/sbom/tests/fixtures/cargo/Cargo.lock",
+          "version_ours": null,
+          "version_theirs": "unknown",
+          "purl_ours": null,
+          "purl_theirs": null,
+          "detail": null
+        },
+        {
+          "tag": "missing",
+          "package": "sample-app",
+          "version_ours": null,
+          "version_theirs": "0.3.0",
+          "purl_ours": null,
+          "purl_theirs": "pkg:cargo/sample-app@0.3.0",
+          "detail": null
+        }
+      ],
+      "version_mismatches": [],
+      "purl_diffs": [],
+      "matched": 10,
+      "total_ours": 10,
+      "total_theirs": 12
+    }
+  ]
+}

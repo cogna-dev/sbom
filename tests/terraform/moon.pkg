@@ -1,0 +1,6 @@
+import {
+  "cogna-dev/sbom/src/packages/terraform" @terraform_pkg,
+  "cogna-dev/sbom/src/formats/spdx",
+  "cogna-dev/sbom/src/formats/cyclonedx",
+  "cogna-dev/sbom/src/types",
+}

@@ -1,0 +1,85 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:00000000-0000-0000-0000-000000000000",
+  "version": 1,
+  "metadata": {
+    "timestamp": "1970-01-01T00:00:00Z",
+    "tools": [
+      {
+        "vendor": "cogna-dev",
+        "name": "cogna-dev/sbom",
+        "version": "0.1.0"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "bom-ref": "pkg:.",
+      "name": ".",
+      "version": "0.0.0"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "pkg:terraform/aws@5.31.0",
+      "name": "aws",
+      "group": "hashicorp",
+      "version": "5.31.0",
+      "purl": "pkg:terraform/hashicorp/aws@5.31.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "h1:oL5924DTbaEuGxvDsEnBHCdgRidE00ZFqPBPanXFMaE="
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:terraform/random@3.6.0",
+      "name": "random",
+      "group": "hashicorp",
+      "version": "3.6.0",
+      "purl": "pkg:terraform/hashicorp/random@3.6.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "h1:R5Ucn26riKIEijcsiom99GgMSjpGC0fsKEPRm3D5c/8="
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:terraform/tls@4.0.5",
+      "name": "tls",
+      "group": "hashicorp",
+      "version": "4.0.5",
+      "purl": "pkg:terraform/hashicorp/tls@4.0.5",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "h1:LWGTWAAnalyzedStringForTLSProvider4x="
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "pkg:.",
+      "dependsOn": [
+        "pkg:terraform/aws@5.31.0",
+        "pkg:terraform/random@3.6.0",
+        "pkg:terraform/tls@4.0.5"
+      ]
+    },
+    {
+      "ref": "pkg:terraform/aws@5.31.0"
+    },
+    {
+      "ref": "pkg:terraform/random@3.6.0"
+    },
+    {
+      "ref": "pkg:terraform/tls@4.0.5"
+    }
+  ]
+}

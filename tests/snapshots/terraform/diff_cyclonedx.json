@@ -1,0 +1,27 @@
+{
+  "ecosystem": "terraform",
+  "comparisons": [
+    {
+      "tool": "syft",
+      "ecosystem": "terraform",
+      "format": "cyclonedx",
+      "only_ours": [],
+      "only_theirs": [
+        {
+          "tag": "missing",
+          "package": "/Users/yufei/workspace/github/cogna-dev/sbom/tests/fixtures/terraform/.terraform.lock.hcl",
+          "version_ours": null,
+          "version_theirs": "unknown",
+          "purl_ours": null,
+          "purl_theirs": null,
+          "detail": null
+        }
+      ],
+      "version_mismatches": [],
+      "purl_diffs": [],
+      "matched": 3,
+      "total_ours": 3,
+      "total_theirs": 4
+    }
+  ]
+}

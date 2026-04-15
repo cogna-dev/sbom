@@ -1,0 +1,96 @@
+{
+  "ecosystem": "terraform",
+  "comparisons": [
+    {
+      "tool": "syft",
+      "ecosystem": "terraform",
+      "format": "spdx",
+      "only_ours": [
+        {
+          "tag": "only-ours",
+          "package": ".",
+          "version_ours": "0.0.0",
+          "version_theirs": null,
+          "purl_ours": null,
+          "purl_theirs": null,
+          "detail": null
+        }
+      ],
+      "only_theirs": [
+        {
+          "tag": "missing",
+          "package": "/Users/yufei/workspace/github/cogna-dev/sbom/tests/fixtures/terraform",
+          "version_ours": null,
+          "version_theirs": "unknown",
+          "purl_ours": null,
+          "purl_theirs": null,
+          "detail": null
+        }
+      ],
+      "version_mismatches": [],
+      "purl_diffs": [],
+      "matched": 3,
+      "total_ours": 4,
+      "total_theirs": 4
+    },
+    {
+      "tool": "msbom",
+      "ecosystem": "terraform",
+      "format": "spdx",
+      "only_ours": [
+        {
+          "tag": "only-ours",
+          "package": ".",
+          "version_ours": "0.0.0",
+          "version_theirs": null,
+          "purl_ours": null,
+          "purl_theirs": null,
+          "detail": null
+        },
+        {
+          "tag": "only-ours",
+          "package": "aws",
+          "version_ours": "5.31.0",
+          "version_theirs": null,
+          "purl_ours": "pkg:terraform/hashicorp/aws@5.31.0",
+          "purl_theirs": null,
+          "detail": null
+        },
+        {
+          "tag": "only-ours",
+          "package": "random",
+          "version_ours": "3.6.0",
+          "version_theirs": null,
+          "purl_ours": "pkg:terraform/hashicorp/random@3.6.0",
+          "purl_theirs": null,
+          "detail": null
+        },
+        {
+          "tag": "only-ours",
+          "package": "tls",
+          "version_ours": "4.0.5",
+          "version_theirs": null,
+          "purl_ours": "pkg:terraform/hashicorp/tls@4.0.5",
+          "purl_theirs": null,
+          "detail": null
+        }
+      ],
+      "only_theirs": [
+        {
+          "tag": "missing",
+          "package": "sample-terraform",
+          "version_ours": null,
+          "version_theirs": "0.1.0",
+          "purl_ours": null,
+          "purl_theirs": "pkg:swid/cogna-dev/cogna-dev.github.io/sample-terraform@0.1.0?tag_id=ea3c8b80-4388-44cd-8e1a-b7038299ab25",
+          "detail": null
+        }
+      ],
+      "version_mismatches": [],
+      "purl_diffs": [],
+      "matched": 0,
+      "total_ours": 4,
+      "total_theirs": 1
+    }
+  ]
+}
