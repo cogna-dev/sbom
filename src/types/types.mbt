@@ -147,7 +147,7 @@ pub fn Package::new(name : String, pkg_type : String) -> Package {
 pub fn Package::with_version(
   name : String,
   version : String,
-  pkg_type : String
+  pkg_type : String,
 ) -> Package {
   let resolved = @version.Version::parse(version)
   {
@@ -172,7 +172,7 @@ pub fn Package::with_version(
 /// Set the version requirement.
 pub fn Package::set_requirement(
   self : Package,
-  req : @version.VersionRequirement
+  req : @version.VersionRequirement,
 ) -> Package {
   { ..self, requirement: Some(req) }
 }
@@ -181,7 +181,7 @@ pub fn Package::set_requirement(
 /// Set the resolved version.
 pub fn Package::set_resolved_version(
   self : Package,
-  version : @version.Version
+  version : @version.Version,
 ) -> Package {
   { ..self, resolved_version: Some(version) }
 }
@@ -190,7 +190,7 @@ pub fn Package::set_resolved_version(
 /// Set the dependency source.
 pub fn Package::set_source(
   self : Package,
-  source : DependencySource
+  source : DependencySource,
 ) -> Package {
   { ..self, source, }
 }
@@ -211,7 +211,7 @@ pub fn Package::set_namespace(self : Package, ns : String) -> Package {
 /// Set the description.
 pub fn Package::set_description(
   self : Package,
-  description : String
+  description : String,
 ) -> Package {
   { ..self, description: Some(description) }
 }
@@ -336,21 +336,17 @@ pub(all) struct SubProject {
 pub fn SubProject::new(
   name : String,
   path : String,
-  project_type : ProjectType
+  project_type : ProjectType,
 ) -> SubProject {
-  {
-    name,
-    path,
-    project_type,
-    version: None,
-    description: None,
-    packages: [],
-  }
+  { name, path, project_type, version: None, description: None, packages: [] }
 }
 
 ///|
 /// Set sub-project version.
-pub fn SubProject::set_version(self : SubProject, version : String) -> SubProject {
+pub fn SubProject::set_version(
+  self : SubProject,
+  version : String,
+) -> SubProject {
   { ..self, version: Some(version) }
 }
 
@@ -358,7 +354,7 @@ pub fn SubProject::set_version(self : SubProject, version : String) -> SubProjec
 /// Set sub-project description.
 pub fn SubProject::set_description(
   self : SubProject,
-  description : String
+  description : String,
 ) -> SubProject {
   { ..self, description: Some(description) }
 }
@@ -388,7 +384,7 @@ pub fn Project::new(
   name : String,
   version : String,
   root_path : String,
-  project_type : ProjectType
+  project_type : ProjectType,
 ) -> Project {
   {
     name,

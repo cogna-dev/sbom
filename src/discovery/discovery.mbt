@@ -49,13 +49,7 @@ pub fn DiscoveryOptions::default() -> DiscoveryOptions {
   {
     max_depth: None,
     skip_dirs: [
-      "node_modules",
-      "target",
-      "vendor",
-      "__pycache__",
-      ".terraform",
-      ".git",
-      "dist",
+      "node_modules", "target", "vendor", "__pycache__", ".terraform", ".git", "dist",
       "build",
     ],
   }
@@ -183,7 +177,7 @@ fn glob_match_segments(
   pat : Array[String],
   pi : Int,
   path : Array[String],
-  pathi : Int
+  pathi : Int,
 ) -> Bool {
   if pi >= pat.length() {
     return pathi >= path.length()
@@ -260,7 +254,8 @@ fn glob_segment_match(pattern : String, segment : String) -> Bool {
     return true
   }
   // Last part must end at the segment's end
-  i.val >= seg_chars.length() || (
+  i.val >= seg_chars.length() ||
+  (
     i.val == seg_chars.length() - last_part.length() + last_part.length() &&
     segment.has_suffix(last_part)
   )
@@ -273,7 +268,7 @@ fn glob_segment_match(pattern : String, segment : String) -> Bool {
 ///|
 /// Build a lookup map: path -> FsEntry, and dir -> [child_paths] for traversal.
 fn build_fs_map(
-  entries : Array[FsEntry]
+  entries : Array[FsEntry],
 ) -> (Map[String, FsEntry], Map[String, Array[String]]) {
   let by_path : Map[String, FsEntry] = {}
   let children : Map[String, Array[String]] = {}
@@ -297,7 +292,7 @@ fn build_fs_map(
 fn collect_workspace_members_from_entries(
   root : String,
   entries : Array[FsEntry],
-  by_path : Map[String, FsEntry]
+  by_path : Map[String, FsEntry],
 ) -> Array[String] {
   let members : Array[String] = []
   let cargo_toml_path = join_path(root, "Cargo.toml")
@@ -323,7 +318,7 @@ fn expand_member_pattern(
   base : String,
   pattern : String,
   entries : Array[FsEntry],
-  out : Array[String]
+  out : Array[String],
 ) -> Unit {
   if !pattern.contains("*") {
     // Simple path
@@ -343,7 +338,7 @@ fn expand_member_pattern(
 /// Detect the project type at a given directory path.
 fn detect_project_at(
   dir_path : String,
-  by_path : Map[String, FsEntry]
+  by_path : Map[String, FsEntry],
 ) -> DiscoveredProject? {
   // Cargo
   let cargo_toml = join_path(dir_path, "Cargo.toml")
@@ -454,7 +449,9 @@ fn parse_cargo_project_info(content : String?) -> (Bool, String?) {
               if key == "name" {
                 let val = line[eq + 1:].to_string().trim().to_string()
                 // Unquote
-                let val = if val.has_prefix("\"") && val.has_suffix("\"") && val.length() >= 2 {
+                let val = if val.has_prefix("\"") &&
+                  val.has_suffix("\"") &&
+                  val.length() >= 2 {
                   val[1:val.length() - 1].to_string()
                 } else {
                   val
@@ -522,7 +519,7 @@ fn parse_npm_project_info(content : String?) -> (Bool, String?) {
 pub fn discover_projects(
   root : String,
   entries : Array[FsEntry],
-  options : DiscoveryOptions
+  options : DiscoveryOptions,
 ) -> Array[DiscoveredProject] {
   let root = normalize_path(root)
   let (by_path, children) = build_fs_map(entries)
@@ -587,7 +584,8 @@ pub fn discover_projects(
           if entry.is_dir {
             let name = file_name(child_path)
             // Skip hidden dirs and skipped dirs
-            if !name.has_prefix(".") && !contains_string(options.skip_dirs, name) {
+            if !name.has_prefix(".") &&
+              !contains_string(options.skip_dirs, name) {
               queue.push((child_path, depth + 1))
             }
           }
@@ -605,7 +603,7 @@ fn collect_all_workspace_members(
   root : String,
   entries : Array[FsEntry],
   by_path : Map[String, FsEntry],
-  out : Array[String]
+  out : Array[String],
 ) -> Unit {
   let root = normalize_path(root)
   // BFS over directories to find workspace files

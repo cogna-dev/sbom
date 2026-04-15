@@ -55,7 +55,7 @@
 pub fn scan_cargo(
   root_path : String,
   cargo_toml_content : String,
-  lock_content : String?
+  lock_content : String?,
 ) -> @types.Project {
   @cargo.parse_cargo_project(root_path, cargo_toml_content, lock_content)
 }
@@ -70,7 +70,7 @@ pub fn scan_cargo(
 pub fn scan_terraform(
   root_path : String,
   tf_files : Array[(String, String)],
-  lock_content : String?
+  lock_content : String?,
 ) -> @types.Project {
   @terraform.parse_terraform_project(root_path, tf_files, lock_content)
 }
@@ -81,7 +81,7 @@ pub fn scan_terraform(
 /// Checks in order: Cargo.toml → package.json → go.mod → pyproject.toml/setup.py/requirements.txt → .terraform.lock.hcl → *.tf
 pub fn detect_project_type(
   dir_path : String,
-  file_names : Array[String]
+  file_names : Array[String],
 ) -> @types.ProjectType {
   for f in file_names {
     let name = basename(f)
@@ -103,7 +103,9 @@ pub fn detect_project_type(
   }
   for f in file_names {
     let name = basename(f)
-    if name == "pyproject.toml" || name == "setup.py" || name == "requirements.txt" {
+    if name == "pyproject.toml" ||
+      name == "setup.py" ||
+      name == "requirements.txt" {
       return @types.ProjectType::Python
     }
   }
@@ -174,7 +176,7 @@ pub(all) struct MultiProjectScanResult {
 pub fn scan_all(
   root : String,
   entries : Array[@discovery.FsEntry],
-  options : @discovery.DiscoveryOptions?
+  options : @discovery.DiscoveryOptions?,
 ) -> MultiProjectScanResult {
   let opts = match options {
     Some(o) => o
@@ -199,7 +201,7 @@ pub fn scan_all(
         warnings.push("Failed to scan project at \{disc.path}: \{msg}")
     }
   }
-  { projects, warnings, }
+  { projects, warnings }
 }
 
 ///|
@@ -207,10 +209,11 @@ pub fn scan_all(
 fn parse_discovered_project(
   disc : @discovery.DiscoveredProject,
   entries : Array[@discovery.FsEntry],
-  content_map : Map[String, String]
+  content_map : Map[String, String],
 ) -> Result[ProjectScanResult, String] {
   let dir = disc.path
-  let project_result : Result[@types.Project, String] = match disc.project_type {
+  let project_result : Result[@types.Project, String] = match
+    disc.project_type {
     @types.ProjectType::Cargo => {
       let cargo_toml_path = "\{dir}/Cargo.toml"
       match content_map.get(cargo_toml_path) {
@@ -267,11 +270,7 @@ fn parse_discovered_project(
 ///|
 /// Check if a file path is directly inside a directory (not subdirectory).
 fn is_in_dir(file_path : String, dir_path : String) -> Bool {
-  let dir = if dir_path.has_suffix("/") {
-    dir_path
-  } else {
-    "\{dir_path}/"
-  }
+  let dir = if dir_path.has_suffix("/") { dir_path } else { "\{dir_path}/" }
   if !file_path.has_prefix(dir) {
     return false
   }

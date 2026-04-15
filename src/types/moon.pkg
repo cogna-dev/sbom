@@ -1,0 +1,3 @@
+import {
+  "cogna-dev/sbom/src/version",
+}

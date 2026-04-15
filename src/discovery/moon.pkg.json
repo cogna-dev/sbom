@@ -1,6 +1,0 @@
-{
-  "import": [
-    "cogna-dev/sbom/src/types",
-    "cogna-dev/sbom/src/packages/cargo"
-  ]
-}

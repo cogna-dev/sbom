@@ -54,10 +54,7 @@ pub fn Version::parse(s : String) -> Version? {
   // Split off prerelease (-)
   let (version, pre) : (String, String?) = match version_pre.find("-") {
     Some(idx) =>
-      (
-        version_pre[0:idx].to_string(),
-        Some(version_pre[idx + 1:].to_string()),
-      )
+      (version_pre[0:idx].to_string(), Some(version_pre[idx + 1:].to_string()))
     None => (version_pre, None)
   }
   let parts : Array[String] = version
@@ -136,7 +133,7 @@ impl Show for VersionConstraint with output(self, logger) {
 /// Check if a version satisfies this constraint.
 pub fn VersionConstraint::matches(
   self : VersionConstraint,
-  version : Version
+  version : Version,
 ) -> Bool {
   match self {
     Exact(v) => version == v
@@ -311,7 +308,7 @@ pub fn VersionRequirement::any() -> VersionRequirement {
 ///|
 /// Create a requirement with a single constraint.
 pub fn VersionRequirement::new(
-  constraint : VersionConstraint
+  constraint : VersionConstraint,
 ) -> VersionRequirement {
   { constraints: [constraint] }
 }
@@ -341,7 +338,7 @@ pub fn VersionRequirement::parse(s : String) -> VersionRequirement? {
 /// Check if a version satisfies all constraints.
 pub fn VersionRequirement::matches(
   self : VersionRequirement,
-  version : Version
+  version : Version,
 ) -> Bool {
   self.constraints.iter().all(fn(c) { c.matches(version) })
 }

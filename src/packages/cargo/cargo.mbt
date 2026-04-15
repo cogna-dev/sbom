@@ -171,7 +171,8 @@ fn parse_cargo_toml(content : String) -> ParsedCargoToml {
       flush_package()
       flush_workspace()
       let header = strip_comment(line)
-      let header = if header.has_prefix("[") && header.has_suffix("]") &&
+      let header = if header.has_prefix("[") &&
+        header.has_suffix("]") &&
         header.length() >= 2 {
         header[1:header.length() - 1].to_string().trim().to_string()
       } else {
@@ -197,7 +198,7 @@ fn parse_cargo_toml(content : String) -> ParsedCargoToml {
       continue
     }
     match section.val {
-      PackageSection => {
+      PackageSection =>
         match line.find("=") {
           Some(eq) => {
             let key = line[0:eq].to_string().trim().to_string()
@@ -211,8 +212,7 @@ fn parse_cargo_toml(content : String) -> ParsedCargoToml {
           }
           None => ()
         }
-      }
-      WorkspaceSection => {
+      WorkspaceSection =>
         if in_members_array.val {
           if line.contains("]") {
             in_members_array.val = false
@@ -238,7 +238,6 @@ fn parse_cargo_toml(content : String) -> ParsedCargoToml {
             None => ()
           }
         }
-      }
       DepsSection => parse_dep_line(line, deps)
       DevDepsSection => parse_dep_line(line, dev_deps)
       BuildDepsSection => parse_dep_line(line, build_deps)
@@ -247,7 +246,7 @@ fn parse_cargo_toml(content : String) -> ParsedCargoToml {
   }
   flush_package()
   flush_workspace()
-  { pkg: final_pkg.val, workspace: final_ws.val, deps, dev_deps, build_deps, }
+  { pkg: final_pkg.val, workspace: final_ws.val, deps, dev_deps, build_deps }
 }
 
 ///|
@@ -256,12 +255,7 @@ fn parse_toml_string_array(s : String, out : Array[String]) -> Unit {
   let inner = match s.find("[") {
     Some(start) =>
       match s.find("]") {
-        Some(end) =>
-          if end > start {
-            s[start + 1:end].to_string()
-          } else {
-            s
-          }
+        Some(end) => if end > start { s[start + 1:end].to_string() } else { s }
         None => s[start + 1:].to_string()
       }
     None => s
@@ -351,7 +345,7 @@ fn dep_to_package(
   name : String,
   dep : CargoDep,
   group : @types.DependencyGroup,
-  resolved : Map[String, (String, String?)]
+  resolved : Map[String, (String, String?)],
 ) -> @types.Package {
   let actual_name : String = match dep {
     Table(tbl) =>
@@ -406,7 +400,7 @@ fn dep_to_package(
     Simple(_) => group
   }
   let pkg = @types.Package::new(actual_name, "cargo")
-  let pkg = { ..pkg, group: effective_group, source, }
+  let pkg = { ..pkg, group: effective_group, source }
   let pkg = match version_req {
     Some(req_str) =>
       match @version.VersionRequirement::parse(req_str) {
@@ -439,7 +433,7 @@ fn dep_to_package(
 pub fn parse_cargo_project(
   root_path : String,
   cargo_toml_content : String,
-  lock_content : String?
+  lock_content : String?,
 ) -> @types.Project {
   let parsed = parse_cargo_toml(cargo_toml_content)
   let resolved : Map[String, (String, String?)] = match lock_content {
@@ -507,7 +501,7 @@ pub fn parse_cargo_project(
 pub fn parse_cargo_member(
   member_path : String,
   cargo_toml_content : String,
-  resolved : Map[String, (String, String?)]
+  resolved : Map[String, (String, String?)],
 ) -> @types.SubProject? {
   let parsed = parse_cargo_toml(cargo_toml_content)
   match parsed.pkg {
@@ -554,9 +548,7 @@ pub fn get_workspace_members(cargo_toml_content : String) -> Array[String] {
 
 ///|
 /// Parse Cargo.lock content into a resolved versions map.
-pub fn parse_lock_file(
-  lock_content : String
-) -> Map[String, (String, String?)] {
+pub fn parse_lock_file(lock_content : String) -> Map[String, (String, String?)] {
   parse_cargo_lock(lock_content)
 }
 

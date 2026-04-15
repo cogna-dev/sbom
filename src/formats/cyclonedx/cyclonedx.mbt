@@ -3,8 +3,12 @@
 fn sanitize_bom_ref(s : String) -> String {
   let buf = StringBuilder::new()
   for ch in s {
-    if ch.is_ascii_alphabetic() || ch.is_ascii_digit() ||
-      ch == '-' || ch == '.' || ch == '_' || ch == '/' {
+    if ch.is_ascii_alphabetic() ||
+      ch.is_ascii_digit() ||
+      ch == '-' ||
+      ch == '.' ||
+      ch == '_' ||
+      ch == '/' {
       buf.write_char(ch)
     } else {
       buf.write_char('-')
@@ -57,28 +61,20 @@ pub fn to_cyclonedx(sbom : @types.Sbom) -> String {
     // External references
     let ext_refs : Array[Json] = []
     match pkg.homepage {
-      Some(hp) => {
+      Some(hp) =>
         ext_refs.push(
-          obj([
-            ("type", Json::string("website")),
-            ("url", Json::string(hp)),
-          ]),
+          obj([("type", Json::string("website")), ("url", Json::string(hp))]),
         )
-      }
       None => ()
     }
 
     // Hashes
     let hashes : Array[Json] = []
     match pkg.checksum {
-      Some(cs) => {
+      Some(cs) =>
         hashes.push(
-          obj([
-            ("alg", Json::string("SHA-256")),
-            ("content", Json::string(cs)),
-          ]),
+          obj([("alg", Json::string("SHA-256")), ("content", Json::string(cs))]),
         )
-      }
       None => ()
     }
 

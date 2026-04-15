@@ -169,15 +169,17 @@ pub fn parse_lock_file(content : String) -> Map[String, ProviderInfo] {
           let key = line[0:eq].to_string().trim().to_string()
           let val_part = line[eq + 1:].to_string().trim().to_string()
           match key {
-            "version" => cur_info_version.val = Some(hcl_unquote(strip_hcl_comment(val_part)))
-            "hashes" => {
+            "version" =>
+              cur_info_version.val = Some(
+                hcl_unquote(strip_hcl_comment(val_part)),
+              )
+            "hashes" =>
               if val_part.contains("[") && val_part.contains("]") {
                 parse_hcl_string_array(val_part, cur_info_hashes)
               } else if val_part.contains("[") {
                 in_hashes_array.val = true
                 hashes_buf.val = val_part + "\n"
               }
-            }
             _ => ()
           }
         }
@@ -249,7 +251,9 @@ pub(all) struct ProviderRequirement {
 
 ///|
 /// Parse required_providers block content (everything inside the block).
-fn parse_required_providers_block(block_content : String) -> Array[ProviderRequirement] {
+fn parse_required_providers_block(
+  block_content : String,
+) -> Array[ProviderRequirement] {
   let result : Array[ProviderRequirement] = []
   // Split into lines and scan for key = { ... } entries
   let lines = block_content.split("\n").map(fn(sv) { sv.to_string() }).collect()
@@ -305,7 +309,10 @@ fn parse_required_providers_block(block_content : String) -> Array[ProviderRequi
 
 ///|
 /// Parse a provider object like `{ source = "hashicorp/aws", version = "~> 5.0" }`.
-fn parse_provider_object(local_name : String, s : String) -> ProviderRequirement {
+fn parse_provider_object(
+  local_name : String,
+  s : String,
+) -> ProviderRequirement {
   let source : Ref[String?] = Ref::new(None)
   let version : Ref[String?] = Ref::new(None)
   for line in s.split("\n") {
@@ -332,7 +339,9 @@ fn parse_provider_object(local_name : String, s : String) -> ProviderRequirement
 ///|
 /// Extract required_providers blocks from a single .tf file content.
 /// Returns the list of provider requirements found.
-pub fn extract_providers_from_tf(content : String) -> Array[ProviderRequirement] {
+pub fn extract_providers_from_tf(
+  content : String,
+) -> Array[ProviderRequirement] {
   let result : Array[ProviderRequirement] = []
   let lines = content.split("\n").map(fn(sv) { sv.to_string() }).collect()
   let i = Ref::new(0)
@@ -346,14 +355,17 @@ pub fn extract_providers_from_tf(content : String) -> Array[ProviderRequirement]
         let inner = lines[i.val].trim().to_string()
         i.val = i.val + 1
         depth.val = depth.val + count_char(inner, '{') - count_char(inner, '}')
-        if block_identifier(inner) == "required_providers" && inner.contains("{") {
+        if block_identifier(inner) == "required_providers" &&
+          inner.contains("{") {
           // Collect content of required_providers block
           let buf = StringBuilder::new()
           let rp_depth = Ref::new(1)
           while i.val < lines.length() && rp_depth.val > 0 {
             let rp_line = lines[i.val].trim().to_string()
             i.val = i.val + 1
-            rp_depth.val = rp_depth.val + count_char(rp_line, '{') - count_char(rp_line, '}')
+            rp_depth.val = rp_depth.val +
+              count_char(rp_line, '{') -
+              count_char(rp_line, '}')
             if rp_depth.val > 0 {
               buf.write_string(rp_line)
               buf.write_char('\n')
@@ -393,7 +405,7 @@ fn tf_dir_name(path : String) -> String {
 /// Build a Package from a ProviderRequirement and optional lock file info.
 fn provider_to_package(
   req : ProviderRequirement,
-  resolved : Map[String, ProviderInfo]
+  resolved : Map[String, ProviderInfo],
 ) -> @types.Package {
   let full_source = match req.source {
     Some(src) => src
@@ -415,7 +427,11 @@ fn provider_to_package(
   }
   let registry_url = "https://registry.terraform.io/providers/\{full_source}"
   let pkg = @types.Package::new(provider_name, "terraform")
-  let pkg = { ..pkg, ns, source: @types.DependencySource::Registry(Some(registry_url)), }
+  let pkg = {
+    ..pkg,
+    ns,
+    source: @types.DependencySource::Registry(Some(registry_url)),
+  }
   // Parse version constraint
   let pkg = match req.version_constraint {
     Some(constraint_str) =>
@@ -448,10 +464,7 @@ fn provider_to_package(
       for hash in pi.hashes {
         match h1_hash.val {
           Some(_) => ()
-          None =>
-            if hash.has_prefix("h1:") {
-              h1_hash.val = Some(hash)
-            }
+          None => if hash.has_prefix("h1:") { h1_hash.val = Some(hash) }
         }
       }
       match h1_hash.val {
@@ -476,7 +489,7 @@ fn provider_to_package(
 pub fn parse_terraform_project(
   root_path : String,
   tf_contents : Array[(String, String)],
-  lock_content : String?
+  lock_content : String?,
 ) -> @types.Project {
   let name = tf_dir_name(root_path)
   let resolved : Map[String, ProviderInfo] = match lock_content {
@@ -489,7 +502,11 @@ pub fn parse_terraform_project(
     root_path,
     @types.ProjectType::Terraform,
   )
-  let subproject = @types.SubProject::new(name, root_path, @types.ProjectType::Terraform)
+  let subproject = @types.SubProject::new(
+    name,
+    root_path,
+    @types.ProjectType::Terraform,
+  )
   // Track seen providers to avoid duplicates
   let seen : Map[String, Bool] = {}
   for pair in tf_contents {
@@ -520,7 +537,7 @@ pub fn parse_tf_file(content : String) -> Array[ProviderRequirement] {
 /// Parse .terraform.lock.hcl content and return resolved provider versions.
 /// Returns a map of provider source -> (version?, hashes).
 pub fn parse_terraform_lock(
-  content : String
+  content : String,
 ) -> Map[String, (String?, Array[String])] {
   let raw = parse_lock_file(content)
   let result : Map[String, (String?, Array[String])] = {}
