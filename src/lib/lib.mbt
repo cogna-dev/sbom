@@ -10,6 +10,7 @@
 ///
 /// ## Supported Project Types
 /// - **Cargo (Rust)**: Parses Cargo.toml and Cargo.lock, supports workspaces
+/// - **Go**: Parses go.mod and go.sum
 /// - **Terraform**: Parses .terraform.lock.hcl and required_providers
 ///
 /// ## Usage
@@ -73,6 +74,21 @@ pub fn scan_terraform(
   lock_content : String?,
 ) -> @types.Project {
   @terraform.parse_terraform_project(root_path, tf_files, lock_content)
+}
+
+///|
+/// Scan a Go module project given file contents.
+///
+/// # Parameters
+/// - `root_path`: Path to the project root (used as fallback name)
+/// - `go_mod_content`: Content of go.mod
+/// - `go_sum_content`: Optional content of go.sum (provides checksums)
+pub fn scan_go(
+  root_path : String,
+  go_mod_content : String,
+  go_sum_content : String?,
+) -> @types.Project {
+  @go.parse_go_project(root_path, go_mod_content, go_sum_content)
 }
 
 ///|
@@ -241,6 +257,17 @@ fn parse_discovered_project(
         }
       }
       Ok(@terraform.parse_terraform_project(dir, tf_files, lock_content))
+    }
+    @types.ProjectType::Go => {
+      let go_mod_path = "\{dir}/go.mod"
+      match content_map.get(go_mod_path) {
+        None => Err("No go.mod content available for \{dir}")
+        Some(go_mod_content) => {
+          let go_sum_path = "\{dir}/go.sum"
+          let go_sum_content = content_map.get(go_sum_path)
+          Ok(@go.parse_go_project(dir, go_mod_content, go_sum_content))
+        }
+      }
     }
     _ => {
       // For unsupported project types, return an empty project
