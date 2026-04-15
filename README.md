@@ -26,6 +26,7 @@
 |---------|---------|
 | 🦀 **Cargo / Rust** | Parses `Cargo.toml` (workspace + single-crate) and `Cargo.lock` |
 | 🏗️ **Terraform / HCL** | Parses `.tf` provider blocks and `.terraform.lock.hcl` |
+| 🐹 **Go** | Parses `go.mod` (require directives) and `go.sum` (checksums) |
 | 📄 **SPDX 2.3** | Full JSON export with packages, relationships, document info |
 | 🔄 **CycloneDX 1.5** | Full JSON export with components, metadata, BOM serial |
 | 🔍 **Auto-discovery** | Virtual-FS BFS traversal with glob matching & workspace exclusion |
@@ -48,6 +49,7 @@ cogna-dev/sbom
     │   └── cyclonedx/    # CycloneDX 1.5 JSON exporter
     ├── packages/
     │   ├── cargo/        # Cargo.toml + Cargo.lock parser
+    │   ├── go/           # go.mod + go.sum parser
     │   └── terraform/    # .tf + .terraform.lock.hcl parser
     ├── discovery/        # VFS-based project discovery engine
     └── lib/              # Top-level public API
@@ -56,17 +58,17 @@ cogna-dev/sbom
 ### Dependency Graph
 
 ```
-         lib
-        / | \
-       /  |  \
- cargo  terra  discovery
-   \     |      /
-    \    |     /
-      types  version
-        |
-      formats
-      /     \
-   spdx  cyclonedx
+             lib
+         /   |   |   \
+        /    |   |    \
+  cargo     go terra  discovery
+      \    |   |    /
+       \   |   |   /
+         types  version
+           |
+         formats
+         /     \
+      spdx   cyclonedx
 ```
 
 ---
@@ -215,6 +217,27 @@ let project = @terraform.parse(files)!
 
 ---
 
+### `src/packages/go` — Go Module Parser
+
+Parses `go.mod` dependency manifests and `go.sum` checksum files.
+
+```moonbit
+let project = @go.parse_go_project(root_path, go_mod_content, Some(go_sum_content))
+
+// project contains all direct and indirect require entries
+// Checksums are taken from go.sum (h1: hash algorithm)
+```
+
+**Handles:**
+- `module` declaration (project name)
+- `go` version directive
+- `require (…)` blocks with multiple entries
+- Single-line `require <module> <version>`
+- `// indirect` annotations
+- `go.sum` `h1:` checksums cross-referenced per module+version
+
+---
+
 ### `src/formats/spdx` — SPDX 2.3 Exporter
 
 Produces a spec-compliant SPDX 2.3 document as a MoonBit `Json` value.
@@ -328,9 +351,9 @@ let cdx  : String = @lib.export_cyclonedx(project)
 |-----------|--------|
 | 🦀 Cargo (Rust) | ✅ Implemented |
 | 🏗️ Terraform | ✅ Implemented |
+| 🐹 Go / go.mod | ✅ Implemented |
 | 📦 npm / package.json | 🔜 Planned |
 | 🐍 Python / pyproject.toml | 🔜 Planned |
-| 🐹 Go / go.mod | 🔜 Planned |
 | ☕ Maven / pom.xml | 🔜 Planned |
 | 💎 Bundler / Gemfile | 🔜 Planned |
 | 🧪 SBOM merge / diff | 🔜 Planned |
