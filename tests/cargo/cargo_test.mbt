@@ -94,20 +94,32 @@ let cargo_lock : String =
 
 ///|
 test "cargo: project name and version are parsed correctly" {
-  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, Some(cargo_lock))
+  let project = @cargo_pkg.parse_cargo_project(
+    "sample-app",
+    cargo_toml,
+    Some(cargo_lock),
+  )
   inspect(project.name, content="sample-app")
   inspect(project.version, content="0.3.0")
 }
 
 ///|
 test "cargo: project type is Cargo" {
-  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, Some(cargo_lock))
+  let project = @cargo_pkg.parse_cargo_project(
+    "sample-app",
+    cargo_toml,
+    Some(cargo_lock),
+  )
   inspect(project.project_type.to_string(), content="cargo")
 }
 
 ///|
 test "cargo: runtime dependencies are detected" {
-  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, Some(cargo_lock))
+  let project = @cargo_pkg.parse_cargo_project(
+    "sample-app",
+    cargo_toml,
+    Some(cargo_lock),
+  )
   let all_pkgs = project.all_packages()
   let names : Array[String] = all_pkgs.map(fn(p) { p.name })
   inspect(names.contains("serde"), content="true")
@@ -120,7 +132,11 @@ test "cargo: runtime dependencies are detected" {
 
 ///|
 test "cargo: dev dependencies are detected" {
-  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, Some(cargo_lock))
+  let project = @cargo_pkg.parse_cargo_project(
+    "sample-app",
+    cargo_toml,
+    Some(cargo_lock),
+  )
   let all_pkgs = project.all_packages()
   let names : Array[String] = all_pkgs.map(fn(p) { p.name })
   inspect(names.contains("pretty_assertions"), content="true")
@@ -129,7 +145,11 @@ test "cargo: dev dependencies are detected" {
 
 ///|
 test "cargo: build dependencies are detected" {
-  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, Some(cargo_lock))
+  let project = @cargo_pkg.parse_cargo_project(
+    "sample-app",
+    cargo_toml,
+    Some(cargo_lock),
+  )
   let all_pkgs = project.all_packages()
   let names : Array[String] = all_pkgs.map(fn(p) { p.name })
   inspect(names.contains("build-info-build"), content="true")
@@ -137,7 +157,11 @@ test "cargo: build dependencies are detected" {
 
 ///|
 test "cargo: resolved versions from Cargo.lock" {
-  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, Some(cargo_lock))
+  let project = @cargo_pkg.parse_cargo_project(
+    "sample-app",
+    cargo_toml,
+    Some(cargo_lock),
+  )
   let all_pkgs = project.all_packages()
   let serde = all_pkgs.filter(fn(p) { p.name == "serde" })
   inspect(serde.length() > 0, content="true")
@@ -146,7 +170,11 @@ test "cargo: resolved versions from Cargo.lock" {
 
 ///|
 test "cargo: checksums extracted from Cargo.lock" {
-  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, Some(cargo_lock))
+  let project = @cargo_pkg.parse_cargo_project(
+    "sample-app",
+    cargo_toml,
+    Some(cargo_lock),
+  )
   let all_pkgs = project.all_packages()
   let anyhow = all_pkgs.filter(fn(p) { p.name == "anyhow" })
   inspect(anyhow.length() > 0, content="true")
@@ -158,7 +186,11 @@ test "cargo: checksums extracted from Cargo.lock" {
 
 ///|
 test "cargo: PURL format is correct" {
-  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, Some(cargo_lock))
+  let project = @cargo_pkg.parse_cargo_project(
+    "sample-app",
+    cargo_toml,
+    Some(cargo_lock),
+  )
   let all_pkgs = project.all_packages()
   let serde = all_pkgs.filter(fn(p) { p.name == "serde" })
   inspect(serde.length() > 0, content="true")
@@ -167,7 +199,11 @@ test "cargo: PURL format is correct" {
 
 ///|
 test "cargo: optional dependency group" {
-  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, Some(cargo_lock))
+  let project = @cargo_pkg.parse_cargo_project(
+    "sample-app",
+    cargo_toml,
+    Some(cargo_lock),
+  )
   let all_pkgs = project.all_packages()
   let env_logger = all_pkgs.filter(fn(p) { p.name == "env_logger" })
   inspect(env_logger.length() > 0, content="true")
@@ -176,7 +212,11 @@ test "cargo: optional dependency group" {
 
 ///|
 test "cargo: dev dependency group" {
-  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, Some(cargo_lock))
+  let project = @cargo_pkg.parse_cargo_project(
+    "sample-app",
+    cargo_toml,
+    Some(cargo_lock),
+  )
   let all_pkgs = project.all_packages()
   let tempfile = all_pkgs.filter(fn(p) { p.name == "tempfile" })
   inspect(tempfile.length() > 0, content="true")
@@ -185,7 +225,11 @@ test "cargo: dev dependency group" {
 
 ///|
 test "cargo: SPDX export contains required top-level fields" {
-  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, Some(cargo_lock))
+  let project = @cargo_pkg.parse_cargo_project(
+    "sample-app",
+    cargo_toml,
+    Some(cargo_lock),
+  )
   let sbom = project.to_sbom()
   let spdx = @spdx.to_spdx(sbom)
   inspect(spdx.contains("\"spdxVersion\": \"SPDX-2.3\""), content="true")
@@ -197,7 +241,11 @@ test "cargo: SPDX export contains required top-level fields" {
 
 ///|
 test "cargo: SPDX export contains serde package entry" {
-  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, Some(cargo_lock))
+  let project = @cargo_pkg.parse_cargo_project(
+    "sample-app",
+    cargo_toml,
+    Some(cargo_lock),
+  )
   let sbom = project.to_sbom()
   let spdx = @spdx.to_spdx(sbom)
   inspect(spdx.contains("\"serde\""), content="true")
@@ -207,7 +255,11 @@ test "cargo: SPDX export contains serde package entry" {
 
 ///|
 test "cargo: SPDX relationships use DEPENDS_ON" {
-  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, Some(cargo_lock))
+  let project = @cargo_pkg.parse_cargo_project(
+    "sample-app",
+    cargo_toml,
+    Some(cargo_lock),
+  )
   let sbom = project.to_sbom()
   let spdx = @spdx.to_spdx(sbom)
   inspect(spdx.contains("\"DEPENDS_ON\""), content="true")
@@ -216,7 +268,11 @@ test "cargo: SPDX relationships use DEPENDS_ON" {
 
 ///|
 test "cargo: CycloneDX export contains required fields" {
-  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, Some(cargo_lock))
+  let project = @cargo_pkg.parse_cargo_project(
+    "sample-app",
+    cargo_toml,
+    Some(cargo_lock),
+  )
   let sbom = project.to_sbom()
   let cdx = @cyclonedx.to_cyclonedx(sbom)
   inspect(cdx.contains("\"bomFormat\": \"CycloneDX\""), content="true")
@@ -227,7 +283,11 @@ test "cargo: CycloneDX export contains required fields" {
 
 ///|
 test "cargo: CycloneDX export contains serde component" {
-  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, Some(cargo_lock))
+  let project = @cargo_pkg.parse_cargo_project(
+    "sample-app",
+    cargo_toml,
+    Some(cargo_lock),
+  )
   let sbom = project.to_sbom()
   let cdx = @cyclonedx.to_cyclonedx(sbom)
   inspect(cdx.contains("\"serde\""), content="true")
@@ -236,7 +296,11 @@ test "cargo: CycloneDX export contains serde component" {
 
 ///|
 test "cargo: parsing without lock file still captures deps" {
-  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, None)
+  let project = @cargo_pkg.parse_cargo_project(
+    "sample-app",
+    cargo_toml,
+    None,
+  )
   let all_pkgs = project.all_packages()
   inspect(all_pkgs.length() > 0, content="true")
   let names : Array[String] = all_pkgs.map(fn(p) { p.name })
@@ -246,7 +310,11 @@ test "cargo: parsing without lock file still captures deps" {
 
 ///|
 test "cargo: inline table dep captures version requirement" {
-  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, None)
+  let project = @cargo_pkg.parse_cargo_project(
+    "sample-app",
+    cargo_toml,
+    None,
+  )
   let all_pkgs = project.all_packages()
   let serde = all_pkgs.filter(fn(p) { p.name == "serde" })
   inspect(serde.length() > 0, content="true")
