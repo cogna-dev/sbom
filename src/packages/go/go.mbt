@@ -244,9 +244,7 @@ fn require_to_package(
   }
   let pkg = {
     ..pkg,
-    source: @types.DependencySource::Registry(
-      Some("https://pkg.go.dev"),
-    ),
+    source: @types.DependencySource::Registry(Some("https://pkg.go.dev")),
   }
   // Resolve the version (Go versions always start with "v")
   let pkg = match @version.Version::parse(req.version) {
@@ -313,9 +311,7 @@ pub fn parse_go_project(
 /// Parse a go.mod file and return the list of module requirements.
 ///
 /// Useful for inspecting individual requirements without creating a Project.
-pub fn parse_go_mod_requires(
-  content : String,
-) -> Array[(String, String, Bool)] {
+pub fn parse_go_mod_requires(content : String) -> Array[(String, String, Bool)] {
   let parsed = parse_go_mod(content)
   let result : Array[(String, String, Bool)] = []
   for req in parsed.requires {
