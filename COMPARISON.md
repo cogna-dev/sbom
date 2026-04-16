@@ -1,6 +1,6 @@
 # SBOM Tool Comparison Report
 
-> Auto-generated on **2026-04-15 14:56 UTC** by `scripts/generate_readme.py`.
+> Auto-generated on **2026-04-16 10:37 UTC** by `scripts/generate_readme.py`.
 > Re-run `scripts/generate_report.sh` to refresh.
 
 ## Summary
@@ -55,7 +55,7 @@
 
 | Package | Version | PURL |
 |---------|---------|------|
-| `/Users/yufei/workspace/github/cogna-dev/sbom/tests/fixtures/cargo` | `unknown` | `–` |
+| `/home/runner/work/sbom/sbom/tests/fixtures/cargo` | `unknown` | `–` |
 
 </details>
 
@@ -106,7 +106,7 @@
 
 | Package | Version | PURL |
 |---------|---------|------|
-| `/Users/yufei/workspace/github/cogna-dev/sbom/tests/fixtures/cargo/Cargo.lock` | `unknown` | `–` |
+| `/home/runner/work/sbom/sbom/tests/fixtures/cargo/Cargo.lock` | `unknown` | `–` |
 | `sample-app` | `0.3.0` | `pkg:cargo/sample-app@0.3.0` |
 
 </details>
@@ -140,7 +140,7 @@
 
 | Package | Version | PURL |
 |---------|---------|------|
-| `/Users/yufei/workspace/github/cogna-dev/sbom/tests/fixtures/go` | `unknown` | `–` |
+| `/home/runner/work/sbom/sbom/tests/fixtures/go` | `unknown` | `–` |
 
 </details>
 
@@ -191,7 +191,7 @@
 
 | Package | Version | PURL |
 |---------|---------|------|
-| `/Users/yufei/workspace/github/cogna-dev/sbom/tests/fixtures/go/go.mod` | `unknown` | `–` |
+| `/home/runner/work/sbom/sbom/tests/fixtures/go/go.mod` | `unknown` | `–` |
 
 </details>
 
@@ -224,7 +224,7 @@
 
 | Package | Version | PURL |
 |---------|---------|------|
-| `/Users/yufei/workspace/github/cogna-dev/sbom/tests/fixtures/terraform` | `unknown` | `–` |
+| `/home/runner/work/sbom/sbom/tests/fixtures/terraform` | `unknown` | `–` |
 
 </details>
 
@@ -278,7 +278,7 @@
 
 | Package | Version | PURL |
 |---------|---------|------|
-| `/Users/yufei/workspace/github/cogna-dev/sbom/tests/fixtures/terraform/.terraform.lock.hcl` | `unknown` | `–` |
+| `/home/runner/work/sbom/sbom/tests/fixtures/terraform/.terraform.lock.hcl` | `unknown` | `–` |
 
 </details>
 

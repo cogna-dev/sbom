@@ -9,7 +9,7 @@
       "only_theirs": [
         {
           "tag": "missing",
-          "package": "/Users/yufei/workspace/github/cogna-dev/sbom/tests/fixtures/terraform/.terraform.lock.hcl",
+          "package": "/home/runner/work/sbom/sbom/tests/fixtures/terraform/.terraform.lock.hcl",
           "version_ours": null,
           "version_theirs": "unknown",
           "purl_ours": null,
