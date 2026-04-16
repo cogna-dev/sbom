@@ -3,6 +3,7 @@ import {
   "moonbitlang/core/json",
   "moonbitlang/core/env",
 }
+
 options(
   "is-main": true,
 )
