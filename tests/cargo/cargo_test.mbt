@@ -296,11 +296,7 @@ test "cargo: CycloneDX export contains serde component" {
 
 ///|
 test "cargo: parsing without lock file still captures deps" {
-  let project = @cargo_pkg.parse_cargo_project(
-    "sample-app",
-    cargo_toml,
-    None,
-  )
+  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, None)
   let all_pkgs = project.all_packages()
   inspect(all_pkgs.length() > 0, content="true")
   let names : Array[String] = all_pkgs.map(fn(p) { p.name })
@@ -310,11 +306,7 @@ test "cargo: parsing without lock file still captures deps" {
 
 ///|
 test "cargo: inline table dep captures version requirement" {
-  let project = @cargo_pkg.parse_cargo_project(
-    "sample-app",
-    cargo_toml,
-    None,
-  )
+  let project = @cargo_pkg.parse_cargo_project("sample-app", cargo_toml, None)
   let all_pkgs = project.all_packages()
   let serde = all_pkgs.filter(fn(p) { p.name == "serde" })
   inspect(serde.length() > 0, content="true")
