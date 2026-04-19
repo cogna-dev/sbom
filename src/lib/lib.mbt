@@ -58,7 +58,43 @@ pub fn scan_cargo(
   cargo_toml_content : String,
   lock_content : String?,
 ) -> @types.Project {
-  @cargo.parse_cargo_project(root_path, cargo_toml_content, lock_content)
+  scan_cargo_with_options(
+    root_path,
+    cargo_toml_content,
+    lock_content,
+    include_transitive_from_lock=true,
+  )
+}
+
+///|
+/// Scan a Cargo project with explicit options.
+pub fn scan_cargo_with_options(
+  root_path : String,
+  cargo_toml_content : String,
+  lock_content : String?,
+  include_transitive_from_lock~ : Bool,
+) -> @types.Project {
+  @cargo.parse_cargo_project_with_options(
+    root_path,
+    cargo_toml_content,
+    lock_content,
+    include_transitive_from_lock=include_transitive_from_lock,
+  )
+}
+
+///|
+/// Scan a Cargo project and include only direct dependencies from Cargo.toml.
+pub fn scan_cargo_direct(
+  root_path : String,
+  cargo_toml_content : String,
+  lock_content : String?,
+) -> @types.Project {
+  scan_cargo_with_options(
+    root_path,
+    cargo_toml_content,
+    lock_content,
+    include_transitive_from_lock=false,
+  )
 }
 
 ///|
@@ -73,7 +109,43 @@ pub fn scan_terraform(
   tf_files : Array[(String, String)],
   lock_content : String?,
 ) -> @types.Project {
-  @terraform.parse_terraform_project(root_path, tf_files, lock_content)
+  scan_terraform_with_options(
+    root_path,
+    tf_files,
+    lock_content,
+    include_lock_only_providers=true,
+  )
+}
+
+///|
+/// Scan a Terraform project with explicit options.
+pub fn scan_terraform_with_options(
+  root_path : String,
+  tf_files : Array[(String, String)],
+  lock_content : String?,
+  include_lock_only_providers~ : Bool,
+) -> @types.Project {
+  @terraform.parse_terraform_project_with_options(
+    root_path,
+    tf_files,
+    lock_content,
+    include_lock_only_providers=include_lock_only_providers,
+  )
+}
+
+///|
+/// Scan a Terraform project and include only direct providers from .tf files.
+pub fn scan_terraform_direct(
+  root_path : String,
+  tf_files : Array[(String, String)],
+  lock_content : String?,
+) -> @types.Project {
+  scan_terraform_with_options(
+    root_path,
+    tf_files,
+    lock_content,
+    include_lock_only_providers=false,
+  )
 }
 
 ///|
@@ -88,7 +160,45 @@ pub fn scan_go(
   go_mod_content : String,
   go_sum_content : String?,
 ) -> @types.Project {
-  @go.parse_go_project(root_path, go_mod_content, go_sum_content)
+  scan_go_with_options(
+    root_path,
+    go_mod_content,
+    go_sum_content,
+    include_indirect=true,
+  )
+}
+
+///|
+/// Scan a Go module with explicit options.
+pub fn scan_go_with_options(
+  root_path : String,
+  go_mod_content : String,
+  go_sum_content : String?,
+  include_indirect~ : Bool,
+) -> @types.Project {
+  @go.parse_go_project_with_options(
+    root_path,
+    go_mod_content,
+    go_sum_content,
+    include_indirect=include_indirect,
+  )
+}
+
+///|
+/// Scan a Go module and include only direct dependencies declared in go.mod.
+///
+/// Dependencies marked as `// indirect` are excluded.
+pub fn scan_go_direct(
+  root_path : String,
+  go_mod_content : String,
+  go_sum_content : String?,
+) -> @types.Project {
+  scan_go_with_options(
+    root_path,
+    go_mod_content,
+    go_sum_content,
+    include_indirect=false,
+  )
 }
 
 ///|

@@ -435,6 +435,25 @@ pub fn parse_cargo_project(
   cargo_toml_content : String,
   lock_content : String?,
 ) -> @types.Project {
+  parse_cargo_project_with_options(
+    root_path,
+    cargo_toml_content,
+    lock_content,
+    include_transitive_from_lock=true,
+  )
+}
+
+///|
+/// Parse Cargo.toml (and optional Cargo.lock) content into a Project with options.
+///
+/// When `include_transitive_from_lock=true`, packages found in Cargo.lock but not
+/// declared directly in Cargo.toml sections are appended as resolved packages.
+pub fn parse_cargo_project_with_options(
+  root_path : String,
+  cargo_toml_content : String,
+  lock_content : String?,
+  include_transitive_from_lock~ : Bool,
+) -> @types.Project {
   let parsed = parse_cargo_toml(cargo_toml_content)
   let resolved : Map[String, (String, String?)] = match lock_content {
     Some(lock_str) => parse_cargo_lock(lock_str)
@@ -469,6 +488,7 @@ pub fn parse_cargo_project(
   match parsed.workspace {
     Some(_) => ()
     None => {
+      let direct_names : Map[String, Bool] = {}
       let subproject = @types.SubProject::new(
         project_name,
         root_path,
@@ -476,24 +496,57 @@ pub fn parse_cargo_project(
       )
       subproject.version = Some(project_version)
       for name, dep in parsed.deps {
+        direct_names[name] = true
         subproject.add_package(
           dep_to_package(name, dep, @types.DependencyGroup::Runtime, resolved),
         )
       }
       for name, dep in parsed.dev_deps {
+        direct_names[name] = true
         subproject.add_package(
           dep_to_package(name, dep, @types.DependencyGroup::Dev, resolved),
         )
       }
       for name, dep in parsed.build_deps {
+        direct_names[name] = true
         subproject.add_package(
           dep_to_package(name, dep, @types.DependencyGroup::Build, resolved),
         )
       }
       project.add_subproject(subproject)
+
+      if include_transitive_from_lock {
+        for name, resolved_info in resolved {
+          let (version, checksum) = resolved_info
+          if direct_names.contains(name) {
+            continue
+          }
+          let pkg = @types.Package::new(name, "cargo")
+          pkg.source = @types.DependencySource::Registry(Some("https://crates.io"))
+          pkg.group = @types.DependencyGroup::Runtime
+          pkg.resolved_version = @version.Version::parse(version)
+          pkg.checksum = checksum
+          project.add_package(pkg)
+        }
+      }
     }
   }
   project
+}
+
+///|
+/// Parse Cargo project and keep only direct dependencies declared in Cargo.toml.
+pub fn parse_cargo_project_direct(
+  root_path : String,
+  cargo_toml_content : String,
+  lock_content : String?,
+) -> @types.Project {
+  parse_cargo_project_with_options(
+    root_path,
+    cargo_toml_content,
+    lock_content,
+    include_transitive_from_lock=false,
+  )
 }
 
 ///|

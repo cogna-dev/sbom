@@ -475,6 +475,42 @@ fn provider_to_package(
   }
 }
 
+///|
+/// Build a Package from a lock-file provider source and ProviderInfo.
+fn provider_from_lock_entry(
+  full_source : String,
+  info : ProviderInfo,
+) -> @types.Package {
+  let (ns, provider_name) = match full_source.find("/") {
+    Some(slash) => {
+      let n = full_source[0:slash].to_string()
+      let p = full_source[slash + 1:].to_string()
+      let p = match p.rev_find("/") {
+        Some(last) => p[last + 1:].to_string()
+        None => p
+      }
+      (Some(n), p)
+    }
+    None => (None, full_source)
+  }
+  let registry_url = "https://registry.terraform.io/providers/\{full_source}"
+  let pkg = @types.Package::new(provider_name, "terraform")
+  pkg.ns = ns
+  pkg.source = @types.DependencySource::Registry(Some(registry_url))
+  match info.version {
+    Some(ver_str) => pkg.resolved_version = @version.Version::parse(ver_str)
+    None => ()
+  }
+  for i in 0..<info.hashes.length() {
+    let hash = info.hashes[i]
+    if hash.has_prefix("h1:") {
+      pkg.checksum = Some(hash)
+      break
+    }
+  }
+  pkg
+}
+
 // ============================================================================
 // Public API
 // ============================================================================
@@ -490,6 +526,26 @@ pub fn parse_terraform_project(
   root_path : String,
   tf_contents : Array[(String, String)],
   lock_content : String?,
+) -> @types.Project {
+  parse_terraform_project_with_options(
+    root_path,
+    tf_contents,
+    lock_content,
+    include_lock_only_providers=true,
+  )
+}
+
+///|
+/// Parse a Terraform project with options.
+///
+/// When `include_lock_only_providers=true`, providers present in
+/// `.terraform.lock.hcl` but not directly declared in `required_providers` are
+/// also included as resolved packages.
+pub fn parse_terraform_project_with_options(
+  root_path : String,
+  tf_contents : Array[(String, String)],
+  lock_content : String?,
+  include_lock_only_providers~ : Bool,
 ) -> @types.Project {
   let name = tf_dir_name(root_path)
   let resolved : Map[String, ProviderInfo] = match lock_content {
@@ -509,6 +565,7 @@ pub fn parse_terraform_project(
   )
   // Track seen providers to avoid duplicates
   let seen : Map[String, Bool] = {}
+  let seen_sources : Map[String, Bool] = {}
   for pair in tf_contents {
     let (_, file_content) = pair
     let reqs = extract_providers_from_tf(file_content)
@@ -519,12 +576,44 @@ pub fn parse_terraform_project(
       }
       if !seen.contains(full_source) {
         seen[full_source] = true
+        seen_sources[full_source] = true
         subproject.add_package(provider_to_package(req, resolved))
       }
     }
   }
+
+  if include_lock_only_providers {
+    for key, info in resolved {
+      let source = if key.has_prefix("registry.terraform.io/") {
+        key[22:].to_string()
+      } else {
+        key
+      }
+      if seen_sources.contains(source) {
+        continue
+      }
+      seen_sources[source] = true
+      subproject.add_package(provider_from_lock_entry(source, info))
+    }
+  }
+
   project.add_subproject(subproject)
   project
+}
+
+///|
+/// Parse Terraform project and keep only direct providers declared in .tf files.
+pub fn parse_terraform_project_direct(
+  root_path : String,
+  tf_contents : Array[(String, String)],
+  lock_content : String?,
+) -> @types.Project {
+  parse_terraform_project_with_options(
+    root_path,
+    tf_contents,
+    lock_content,
+    include_lock_only_providers=false,
+  )
 }
 
 ///|

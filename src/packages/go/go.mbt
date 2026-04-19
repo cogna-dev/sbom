@@ -279,6 +279,22 @@ pub fn parse_go_project(
   go_mod_content : String,
   go_sum_content : String?,
 ) -> @types.Project {
+  parse_go_project_with_options(
+    root_path,
+    go_mod_content,
+    go_sum_content,
+    include_indirect=true,
+  )
+}
+
+///|
+/// Parse a Go module project and control whether indirect dependencies are included.
+pub fn parse_go_project_with_options(
+  root_path : String,
+  go_mod_content : String,
+  go_sum_content : String?,
+  include_indirect~ : Bool,
+) -> @types.Project {
   let parsed = parse_go_mod(go_mod_content)
   let checksums : Map[String, String] = match go_sum_content {
     Some(sum_content) => parse_go_sum(sum_content)
@@ -301,10 +317,28 @@ pub fn parse_go_project(
     @types.ProjectType::Go,
   )
   for req in parsed.requires {
+    if !include_indirect && req.indirect {
+      continue
+    }
     subproject.add_package(require_to_package(req, checksums))
   }
   project.add_subproject(subproject)
   project
+}
+
+///|
+/// Parse only direct Go dependencies from go.mod (skip `// indirect`).
+pub fn parse_go_project_direct(
+  root_path : String,
+  go_mod_content : String,
+  go_sum_content : String?,
+) -> @types.Project {
+  parse_go_project_with_options(
+    root_path,
+    go_mod_content,
+    go_sum_content,
+    include_indirect=false,
+  )
 }
 
 ///|
